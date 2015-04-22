@@ -136,9 +136,9 @@ public class MapCSVtoLOD
 		{
 			while ((line = br.readLine()) != null && readcnt<DATA_READ_COUNT )
 			{
-				if(r.nextInt()%2!=0)
+/*				if(r.nextInt()%2!=0)
 					continue;
-				readcnt++;
+*/				readcnt++;
 				String[] data = line.split(cvsSplitBy);
 				for (int i = 0; i < data.length; i++) 
 				{
@@ -204,9 +204,9 @@ public class MapCSVtoLOD
 			JOptionPane.showMessageDialog(null,	"Unable to read data from CSV file in bottomUpApproach() -- "+ e.getMessage(), "Error",	JOptionPane.CANCEL_OPTION);
 			e.printStackTrace();
 		}
-		for(int i=0;i<colnames[fileno].size();i++)
+/*		for(int i=0;i<colnames[fileno].size();i++)
 			topN.get(fileno)[i]=topNKeys(dataUris.get(fileno)[i],TOPN_KEYS);
-	}
+*/	}
 	
 	// Top down approach with 2 pass algorithm
 	public void topDownApproach(int fileno) 
@@ -296,11 +296,18 @@ public class MapCSVtoLOD
 				{
 					rangeq=rangers.nextSolution();
 					String ran=rangeq.get("r").toString();
-					if(dataUris.get(fileno)[colno].containsKey(ran)) // Check in Bottom Up CC, IF present then find domain and its equivalent classes
+					if(dataUris.get(fileno)[colno].size()>0) // Check whether the bottom up CC's of this column is not null
+					{
+						if(dataUris.get(fileno)[colno].containsKey(ran)) // Check in Bottom Up CC, IF present then find domain and its equivalent classes
+						{
+							fillDEC(fileno, cpdec, s);
+						}
+						else{}//Remove the property from cpmap because it is not part of bottom up CC
+					}
+					else // Skip checking the range because bottom up CC's  is null - arbitary data 
 					{
 						fillDEC(fileno, cpdec, s);
 					}
-					else{}//Remove the property from cpmap because it is not part of bottom up CC
 				}
 				else// If there is no range associated with the candidate property
 				{

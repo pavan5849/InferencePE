@@ -34,7 +34,6 @@ public class Inference extends JFrame implements ActionListener
 
 	public Inference()
 	{
-		// Initialize Frame
 		super("INFERENCE IN LARGE");
 		setSize(Toolkit.getDefaultToolkit().getScreenSize());
 

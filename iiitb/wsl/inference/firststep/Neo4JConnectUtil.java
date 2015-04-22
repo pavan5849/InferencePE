@@ -2,7 +2,6 @@ package org.iiitb.wsl.inference.firststep;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -85,6 +84,7 @@ public class Neo4JConnectUtil
 							{
 								cpNode=graphDb.createNode(DynamicLabel.label("CP"));
 								cpNode.setProperty("name", cp);
+	        					cpNode.setProperty("short_name", cp.substring(cp.lastIndexOf('/')+1, cp.length()));
 								nodes.put(cp, cpNode);
     							cpNode.setProperty("type", "CP");    						
 								colNode.createRelationshipTo(cpNode, RelTypes.CP);
@@ -100,6 +100,7 @@ public class Neo4JConnectUtil
 								{
 									dNode=graphDb.createNode(DynamicLabel.label("CLASS"));
 									dNode.setProperty("name", d);
+									dNode.setProperty("short_name", d.substring(d.lastIndexOf('/')+1, d.length()));
 									dNode.setProperty("D_Node", "true");
 									dNode.setProperty("EC_Node", "false");
 									dNode.setProperty("CC_Node", "false");
@@ -107,7 +108,10 @@ public class Neo4JConnectUtil
 									cpNode.createRelationshipTo(dNode, RelTypes.D);
 								}
 								else if(checkRealtion(cpNode,dNode,RelTypes.D))
+								{
 									cpNode.createRelationshipTo(dNode, RelTypes.D);
+									dNode.setProperty("D_Node", "true");
+								}
 
 								Iterator<String> ecit=dcentry.getValue().iterator();
 								while(ecit.hasNext())
@@ -120,6 +124,7 @@ public class Neo4JConnectUtil
 										{
 											ecNode=graphDb.createNode(DynamicLabel.label("CLASS"));
 											ecNode.setProperty("name",ec);
+											ecNode.setProperty("short_name", ec.substring(ec.lastIndexOf('/')+1, ec.length()));
 											ecNode.setProperty("D_Node", "false");
 											ecNode.setProperty("EC_Node", "true");
 											ecNode.setProperty("CC_Node", "false");
@@ -127,24 +132,30 @@ public class Neo4JConnectUtil
 											dNode.createRelationshipTo(ecNode, RelTypes.EC);
 										}
 										else if(checkRealtion(dNode,ecNode,RelTypes.EC))
-											dNode.createRelationshipTo(ecNode, RelTypes.EC);									
+										{
+											ecNode.setProperty("EC_Node", "true");
+											dNode.createRelationshipTo(ecNode, RelTypes.EC);
+										}																				
 									}
     							}
     						}	
     					}
 
     					//Adding candidate classes for data to the graph
-    					ListIterator<String> entry =MapCSVtoLOD.topN.get(nooffiles)[colno].listIterator();
-    					while(entry.hasNext())
+    					/*ListIterator<String> entry =MapCSVtoLOD.topN.get(nooffiles)[colno].listIterator();
+    					while(entry.hasNext())*/
+    					for(Entry<String, Integer> entry : MapCSVtoLOD.dataUris.get(nooffiles)[colno].entrySet())
     					{
     						if(entry != null)
     						{
-    							String cc=entry.next();
+    							//String cc=entry.next();
+    							String cc=entry.getKey();
     							Node ccNode=nodes.get(cc);
     							if(ccNode==null)
     							{
     								ccNode=graphDb.createNode(DynamicLabel.label("CLASS"));
     								ccNode.setProperty("name", cc);
+    								ccNode.setProperty("short_name", cc.substring(cc.lastIndexOf('/')+1, cc.length()));
     								ccNode.setProperty("D_Node", "false");
     								ccNode.setProperty("EC_Node", "false");
     								ccNode.setProperty("CC_Node", "true");
@@ -152,7 +163,10 @@ public class Neo4JConnectUtil
 									colNode.createRelationshipTo(ccNode, RelTypes.CC);
     							}
     							else if(checkRealtion(colNode,ccNode,RelTypes.CC))
-										colNode.createRelationshipTo(ccNode, RelTypes.CC);
+    							{
+									colNode.createRelationshipTo(ccNode, RelTypes.CC);
+	    							ccNode.setProperty("CC_Node", "true");
+    							}
     						}
     					}
     				}

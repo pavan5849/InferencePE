@@ -30,10 +30,6 @@ public class FinalResults extends JPanel implements ActionListener
 		dcs.addActionListener(this);
 		addComp(i++,1,1,1,new JLabel("  "));
 		addComp(i++,1	,1,1,dcs);
-		rep1=new JButton("Report - CCS & DCS");
-		rep1.addActionListener(this);
-		addComp(i++,1,1,1,new JLabel("  "));
-		addComp(i++,1	,1,1,rep1);
 		buc=new JButton("Bottom Up- CSB");
 		buc.addActionListener(this);
 		addComp(i++,1,1,1,new JLabel("  "));
@@ -46,6 +42,10 @@ public class FinalResults extends JPanel implements ActionListener
 		rep2.addActionListener(this);
 		addComp(i++,1,1,1,new JLabel("  "));
 		addComp(i++,1	,1,1,rep2);
+		rep1=new JButton("Final Report - CCS & DCS");
+		rep1.addActionListener(this);
+		addComp(i++,1,1,1,new JLabel("  "));
+		addComp(i++,1	,1,1,rep1);
 	}
 
 	public void addComp(int r,int c,int w ,int h,Component cc)
@@ -63,7 +63,7 @@ public class FinalResults extends JPanel implements ActionListener
 	{
 		if(ae.getSource()==ccs)
 		{
-			new LoadTableResults("ccs",4);
+			new LoadTableResults("ccs",3);
 		}
 		else if(ae.getSource()==dcs)
 		{
@@ -79,11 +79,11 @@ public class FinalResults extends JPanel implements ActionListener
 		}
 		else if(ae.getSource()==rep1)
 		{
-			//new LoadTableResults("rep1", 5);
+			new LoadTableResults("rep1", 5);
 		}
 		else if(ae.getSource()==rep2)
 		{
-			//new LoadTableResults("rep2", 5);			
+			new LoadTableResults("rep2", 4);			
 		}
 	}
 }
