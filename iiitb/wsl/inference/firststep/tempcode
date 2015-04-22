@@ -1,3 +1,5 @@
+http://dbpedia.org/property/lastname
+
 								if(cpdec.containsKey(s))
 									dmap=cpdec.get(dclass);
 								else

@@ -320,9 +320,9 @@ public class MapCSVtoLOD
 		QueryExecution dexec=null,ecexec=null;
 		QuerySolution dq=null,ecq=null;
 		ResultSet  drs=null, ecrs=null;
-
+		boolean domainflag=false;
 		Map<String,Set<String>> dmap=new HashMap<String,Set<String>>();
-		cpdec.put(s, dmap);
+
 		try 
 		{
 			String getd=" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  select distinct ?d where { "
@@ -332,6 +332,7 @@ public class MapCSVtoLOD
 			drs= dexec.execSelect();
 			while(drs.hasNext())
 			{
+				domainflag=true;
 				dq=drs.nextSolution();
 				String dclass=dq.get("d").toString();
 				
@@ -373,6 +374,8 @@ public class MapCSVtoLOD
 			JOptionPane.showMessageDialog(null,	"Unable to connect to LOD -- "+ e.getMessage(), "Error",	JOptionPane.CANCEL_OPTION);
 			e.printStackTrace();
 		}
+		if(domainflag)// Add only the property which has at least one domain class 
+			cpdec.put(s, dmap);
 	}
 
 	public void getCandidatePropertiesFromService(String service, Map<String,Integer> cpmap, String query, String colname)
