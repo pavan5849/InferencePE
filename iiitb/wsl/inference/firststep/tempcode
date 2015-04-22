@@ -1,0 +1,290 @@
+								if(cpdec.containsKey(s))
+									dmap=cpdec.get(dclass);
+								else
+								{
+									dmap=new HashMap<String, Set<String> >();
+									cpdec.put(s, dmap);
+								}
+								
+								Set<String> ecset=null;
+								if(dmap.containsKey(dclass))
+									ecset=dmap.get(dclass);
+								else
+								{
+									ecset=new HashSet<String>();
+									dmap.put(dclass,ecset);
+								}
+
+
+
+/*    							if(dbpp.equals("done"))
+    							{
+    								lodflag=false;
+    								continue;
+    							}
+*/
+
+								if(colno==0 || lodflag)								
+								{
+									if(checkRealtion(colNode,dbppNode,RelTypes.DBPP))
+										colNode.createRelationshipTo(dbppNode, RelTypes.DBPP);
+								}							
+    							else
+    							{
+    								if(checkRealtion(colNode,dbppNode,RelTypes.LODP))
+    									colNode.createRelationshipTo(dbppNode, RelTypes.LODP);
+    							}    									
+
+
+			/*if(lodconflag)
+			{
+				setDataToOutput("\n\n---------LOD Top Down classes for Column :"+colnames[fileno].get(i)+"---------\n");
+				callLOD(fileno,colnames[fileno].get(i),i);
+			}*/
+
+
+		//setDataToOutput("\n\n---------DBPedia Top Down classes for Column :"+colnames[fileno].get(0)+"---------\n");
+		//callDBPedia(fileno,colnames[fileno].get(0),0);
+
+
+	/*public void callLOD(int fileno, String colname , int colno)
+	{
+		int dcnt=0,eccnt=0;
+		ResultSet rs2=null;		
+		Map<String,Integer> tempmap=new HashMap<String, Integer>(hypothesis[fileno]);
+		
+		for(Entry<String,Integer> entry: tempmap.entrySet())
+		{
+			String lodcolnamequery="PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+					+ "PREFIX owl: <http://www.w3.org/2002/07/owl#> "
+					+" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+					+"	select distinct ?s ?d ?ec ?r{"
+					+" {{?s rdfs:domain <"+entry.getKey()+">}  UNION"
+					+"  {?s rdfs:isDefinedBy  <"+entry.getKey()+">}}."
+					+" ?s rdfs:label ?l. FILTER regex(?l ,\""+colname +"\", \"i\")."
+					+" ?s rdfs:domain ?d."
+				//	+" ?s rdfs:range ?r."
+					+ " ?d owl:equivalentClass ?ec"									
+					+" }";
+
+			try {
+				qe2=QueryExecutionFactory.sparqlService(LOD_SERVICE,lodcolnamequery);
+				rs2= qe2.execSelect();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null,	"Unable to connect to LOD -- "+ e.getMessage(), "Error",	JOptionPane.CANCEL_OPTION);
+				e.printStackTrace();
+			}
+			while(rs2.hasNext())
+			{
+				q = rs2.nextSolution();
+				//if(dataUris.get(fileno)[colno].containsKey(q.get("r").toString()))
+				{
+					dcnt=eccnt=1;					
+					TopDown td=new TopDown();
+					td.setDbpp(q.get("s").toString());
+					td.setD(q.get("d").toString());
+					td.setEc(q.get("ec").toString());
+					setDataToOutput("\n"+td.getDbpp()+" - "+td.getD()+" - "+td.getEc());
+					
+					if(hypothesis[fileno].containsKey(q.get("d").toString()))
+						dcnt=hypothesis[fileno].get(q.get("d").toString())+1;
+					else 
+						totaldcnt++;
+					if(hypothesis[fileno].containsKey(q.get("ec").toString()))
+						eccnt=hypothesis[fileno].get(q.get("ec").toString())+1;
+					
+					hypothesis[fileno].put(q.get("d").toString(), dcnt);
+					hypothesis[fileno].put(q.get("ec").toString(), eccnt);
+					colUris.get(fileno)[colno].add(td);
+				}
+			}
+		}
+	}*/
+
+
+		/*try {// For Comment
+
+			cpscommentqexe=QueryExecutionFactory.sparqlService(DBPEDIA_SERVICE,dbppscommentquery);
+			cpscomemntrs = cpscommentqexe.execSelect();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null,	"Unable to connect to LOD -- "+ e.getMessage(), "Error",	JOptionPane.CANCEL_OPTION);
+			e.printStackTrace();
+		}
+		
+		while(cpscomemntrs.hasNext())
+		{
+			cppscommentq=cpscomemntrs.nextSolution();
+			String s=cppscommentq.get("s").toString();
+			if(!cpmap.containsKey(s))
+				cpmap.put(s, 1);
+			else
+				cpmap.put(s, cpmap.get(s)+1);
+		}*/
+
+
+
+/*				while (rs1.hasNext()) 
+				{
+					q = rs1.nextSolution();
+					String dquery = "select ?d where {<"+ q.get("s").toString() +"> rdfs:domain ?d}";
+					ResultSet rs2=null;
+					try {
+						qe2=QueryExecutionFactory.sparqlService(DBPEDIA_SERVICE,dquery);
+						rs2 = qe2.execSelect();
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null,	"Unable to connect to DBPedia -- "+ e.getMessage(), "Error",	JOptionPane.CANCEL_OPTION);
+						e.printStackTrace();
+					}
+					while(rs2.hasNext())
+					{
+						
+					}
+				if(dataUris.get(fileno)[colno].containsKey(q.get("r").toString()))
+						{
+								int dcnt=1, eccnt=1;
+							dcnt=eccnt=1;
+							TopDown td=new TopDown();
+							td.setDbpp(q.get("s").toString());
+							td.setD(q.get("d").toString());
+							td.setEc(q.get("ec").toString());
+							setDataToOutput("\n"+td.getDbpp()+" - "+td.getD()+" - "+td.getEc());
+			
+							if(hypothesis[fileno].containsKey(q.get("d").toString()))
+								dcnt=hypothesis[fileno].get(q.get("d").toString())+1;
+							//else
+								totaldcnt++;
+							if(hypothesis[fileno].containsKey(q.get("ec").toString()))
+								eccnt=hypothesis[fileno].get(q.get("ec").toString())+1;
+							
+							hypothesis[fileno].put(q.get("d").toString(), dcnt);
+							hypothesis[fileno].put(q.get("ec").toString(), eccnt);
+							colUris.get(fileno)[colno].add(td);
+						}}*/
+						
+						/*
+		String dbppquery="PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#> "
+				+" PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "
+				+"	select distinct ?s ?d ?ec ?r where {"
+				+" {{?s a owl:DatatypeProperty} UNION"
+				+" {?s a owl:ObjectProperty} UNION "
+				+" {?s a rdf:Property}}. "
+				+" ?s rdfs:label ?l. FILTER regex(?l ,\""+colname +"\", \"i\")."
+				+" ?s rdfs:domain ?d."
+			//	+" ?s rdfs:range ?r."
+				+ " ?d owl:equivalentClass ?ec"									
+				+" }";*/
+				
+
+===========================================================================
+/*			fno=filenum;
+  			SwingUtilities.invokeLater(new Runnable(){
+				@Override
+				public void run() {
+					i.jpb.setValue((fno+1)*(100/noofcsv));
+					//i.jpb.repaint();
+					//i.setVisible(true);
+				}				
+			});
+		
+			SwingWorker<Void,Void> worker=new SwingWorker<Void,Void>(){
+				@Override
+				protected Void doInBackground() throws Exception {
+					i.jpb.setValue((fno+1)*(100/noofcsv));
+					i.repaint();
+					i.setVisible(true);
+					return null;
+				}
+			};
+			worker.execute();	*/
+==========================================================================
+
+
+   	//UniqueFactory.UniqueNodeFactory unfac=createUniqueNodeFactory();
+   	
+	private Node createUniqueNodeFactory(String columnname) {
+        /*try ( Transaction tx = graphDb.beginTx() )
+        {
+            UniqueFactory.UniqueNodeFactory result = new UniqueFactory.UniqueNodeFactory( graphDb, "inference" )
+            {
+                @Override
+                protected void initialize( Node created, Map<String, Object> properties )
+                {
+                    created.addLabel( DynamicLabel.label( "Column" ) );
+                    created.setProperty( "name", properties.get( "name" ) );
+                }
+            };
+            tx.success();
+            return result;
+        }	*/	
+        
+        Node result = null;
+        ResourceIterator<Node> resultIterator = null;
+        try ( Transaction tx = graphDb.beginTx() )
+        {
+            String queryString = "MERGE (col:Column {name: {name}}) RETURN col";
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put( "name", columnname );
+            resultIterator = graphDb.execute( queryString, parameters ).columnAs( "col" );
+            result = resultIterator.next();
+            tx.success();
+            return result;
+        }
+	}
+	
+	        	 /*graphDb.schema()
+             .constraintFor( DynamicLabel.label( "Table" ) )
+             .assertPropertyIsUnique( "name" )
+             .create();
+           
+        	 graphDb.schema()
+             .constraintFor( DynamicLabel.label( "Column" ) )
+             .assertPropertyIsUnique( "name" )
+             .create();
+
+        	 graphDb.schema()
+             .constraintFor( DynamicLabel.label( "DBPP" ) )
+             .assertPropertyIsUnique( "name" )
+             .create();
+
+        	 graphDb.schema()
+             .constraintFor( DynamicLabel.label( "CLASS" ) )
+             .assertPropertyIsUnique( "name" )
+             .create();
+*/
+	
+	
+	    			//Node tableNode=unfac.getOrCreate("name", MapCSVtoLOD.csvFiles[nooffiles]);
+    			//graphDb.findNodes(DynamicLabel.label("Table"), "name", MapCSVtoLOD.csvFiles[nooffiles]);
+    			//Node tableNode=graphDb.createNode(DynamicLabel.label("Table"));
+	
+	
+	    					//Node colNode=unfac.getOrCreate("name",colname);
+    					//Node colNode=graphDb.createNode(DynamicLabel.label("Column"));
+    					//Node colNode=createUniqueNodeFactory(colname);
+	
+	
+	    							/*Node dbppNode=unfac.getOrCreate("name",dbpp);
+    							Node dNode=unfac.getOrCreate("name",d);
+    							Node ecNode=unfac.getOrCreate("name",ec);*/
+    							/*Node dbppNode=graphDb.createNode(DynamicLabel.label("DBPP"));
+    							Node dNode=graphDb.createNode(DynamicLabel.label("CLASS"));
+    							Node ecNode=graphDb.createNode(DynamicLabel.label("CLASS"));*/
+	
+	
+	    							//Node ccNode=unfac.getOrCreate("name",ccnode);
+    							//Node ccNode=graphDb.createNode(DynamicLabel.label("CLASS"));
+	
+	    		/*String query1="MERGE (n:TABLE) RETURN n";
+        	Result result = graphDb.execute(query1); 
+   			System.out.println(result.resultAsString());
+    		query1="MERGE (n:COLUMN) RETURN n";
+        	result = graphDb.execute(query1); 
+   			System.out.println(result.resultAsString());
+    		query1="MERGE (n:DBPP) RETURN n";
+        	result = graphDb.execute(query1); 
+   			System.out.println(result.resultAsString());
+    		query1="MERGE (n:CLASS) RETURN n";
+        	result = graphDb.execute(query1); 
+   			System.out.println(result.resultAsString());*/
+	
